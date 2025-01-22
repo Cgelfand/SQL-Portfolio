@@ -54,56 +54,57 @@ VALUES
 27
 --------------------------------------------------------------------------------
 ​
-
---Write a SQL query that orders the items by price.
+--prompt 1: order items by price (q#1)
 Select *
 From superstore
-Order by price
+Order by price 
 ;
 
---Write your own SQL query that will show a statistic about the item prices, like a sum, average, minimum, maximum, or count.
+--prompt 2 SQL query that will show a statistic about the item prices (q#2)
 Select SUM(price)
 From superstore
 ;
-
-Select Count(price)
+--q#3
+Select item_name, AVG(price)
 From superstore
-Where price = 24.99
+Group by item_name
+Order by AVG(price)
 ;
-
-Select AVG(price)
-From superstore
-;
-
-Select MAX(price), item_name
-FROM superstore
-GROUP BY item_name
-order by MAX(price) Desc
-;
-
---Come up with your own question about the data and try to answer it using SQL. For example: How many air purifiers are in stock?
-
-Select Count(item_name)
-FROM superstore
-Where item_name = 'Memory Foam Mattress'
-;
-
-Select Count(category)
-FROM superstore
-Where category = 'Kitchen Supplies'
-;
-
-Select AVG(price), category
-From superstore
-where category = 'Electronics'
-;
-
-Select AVG(price), category
+--q#4
+Select item_id, item_name, category, Min(price)
 From superstore
 Group by category
-order by avg(price) desc
+Order by Min(price)
 ;
-
+--q#5
+Select MAX(price), item_name, category
+FROM superstore
+GROUP BY category
+order by MAX(price) Desc
+;
+--prompt 3: show a statistic about the price for items in the category of "Kitchen Supplies" (q#6)
+Select category 'Kitchen Supplies', Avg(price), Min(price), Max(price)
+From superstore
+;
+--Prompt 4: Custom queries 
+--Check which items are low in stock q#7
+Select item_id, item_name, category, stock_quantity
+From superstore
+where stock_quantity <25
+Order by stock_quantity
+;
+--check which items are highest rated q#8
+Select *
+From superstore
+Where average_rating >= 4.5
+Order by average_rating
+;
+--Check how many items are in the Kitchen Supplies category q#9
+Select category, Count(category)
+From superstore
+Where category = 'Kitchen Supplies'
+;
+--Check which higher-than-average priced items are low in stock q#10
 SELECT * FROM superstore
 WHERE price > (SELECT AVG(price) FROM superstore) AND stock_quantity <30
 ORDER by average_rating
