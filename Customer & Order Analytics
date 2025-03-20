@@ -95,4 +95,37 @@ AND orderID <> 'Order ID'
 AND length(orderID) = 6     --this line and the previous line help to eliminate incomplete or missing data from the table and keep the results from the query accurate
 ;
 
+-- Practice with using between, like, and searching with a % before, after, or on both sides of a character string.
+SELECT orderdate
+FROM BIT_DB.FebSales
+WHERE orderdate between '02/13/19 00:00' and '02/18/19 00:00'             --Searches between the two dates and times (DD/MM/YY HH:MM)
+;
+
+SELECT location
+FROM BIT_DB.FebSales
+WHERE orderdate = '02/18/19 01:35'           --Exact time of order is known
+;
+
+SELECT sum(quantity)
+FROM BIT_DB.FebSales
+WHERE orderdate like '02/18/19%'            --Filters all orders from 2.18.19 regardless of time
+;
+
+SELECT DISTINCT Product, Price
+FROM BIT_DB.FebSales
+WHERE Price like '%.99'                   --Filters the prices to only those that end in .99
+;
+
+SELECT DISTINCT Product, Price
+FROM BIT_DB.FebSales
+WHERE Product like '%batteries%'          --Filters products to anything that has batteries in the title (ex: aa Batteries 4 pack, AAA batteries 2 pack, AA batteries 2 pack)
+;
+
+--Practical application of these skills: List all the products sold in Los Angeles in February, and include how many of each were sold.
+
+SELECT Product, SUM(quantity)                   -- sum to find the total quantity of each item sold
+FROM BIT_DB.FebSales
+WHERE location like '%Los Angeles%'           --In the location column it shows addresses with house number city state etc. This will show all orders in los angeles disregarding information before or after the city.
+Group by Product                              -- Group By required after aggregate functions
+;
 
