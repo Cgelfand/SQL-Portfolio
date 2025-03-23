@@ -1,0 +1,59 @@
+--SPOTIFY PROJECT
+
+--I performed analytics on Spotify song data downloaded from Kaggle that I used to populate a table created with the following code:
+
+CREATE TABLE BIT_DB.Spotifydata (
+id integer PRIMARY KEY,
+artist_name varchar NOT NULL,
+track_name varchar NOT NULL,
+track_id varchar NOT NULL,
+popularity integer NOT NULL,
+danceability decimal(4,3) NOT NULL,
+energy decimal(4,3) NOT NULL,
+song_key integer NOT NULL,
+loudness decimal(5,3) NOT NULL,
+song_mode integer NOT NULL,
+speechiness decimal(5,4) NOT NULL,
+acousticness decimal(6,5) NOT NULL,
+instrumentalness decimal(8,7) NOT NULL,
+liveness decimal(5,4) NOT NULL,
+valence decimal(4,3) NOT NULL,
+tempo decimal(6,3) NOT NULL,
+duration_ms integer NOT NULL,
+time_signature integer NOT NULL )
+;
+
+SELECT *
+FROM BIT_DB.Spotifydata
+;
+
+--Which artists appear on the list more than once?
+
+Select artist_name, Count(artist_name) 
+FROM Bit_db.Spotifydata
+GROUP BY artist_name
+HAVING Count(artist_name) >1
+;
+
+--Who are the top 10 artists based on popularity?
+
+SELECT artist_name, track_name, popularity
+FROM BIT_DB.Spotifydata 
+ORDER BY popularity desc
+limit 10
+;
+
+--What's the average danceability, loudness, energy, tempo, and duration for the 10 most popular songs?
+
+SELECT Round(AVG(danceability), 4), ROUND(avg(loudness), 4), Round(avg(energy), 4), ROUND(avg(tempo), 4), ROUND(avg(duration_ms), 2)
+FROM BIT_DB.Spotifydata
+ORDER BY popularity DESC
+limit 10;
+;
+
+--Which songs are the most popular AND best to dance to?
+
+SELECT artist_name, track_name, popularity, danceability, ROUND((popularity*danceability), 3) AS dance_pop_score
+FROM BIT_DB.Spotifydata
+ORDER BY dance_pop_score DESC
+;
